@@ -1,6 +1,6 @@
 package com.example.webdevelopmentproject.config;
 
-import com.example.webdevelopmentproject.repository.UserRepository;
+import com.example.webdevelopmentproject.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
-package com.example.webdevelopmentproject.repository;
+package com.example.webdevelopmentproject.persistence.repository;
 
-import com.example.webdevelopmentproject.user.User;
+import com.example.webdevelopmentproject.persistence.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

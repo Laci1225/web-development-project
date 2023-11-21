@@ -1,8 +1,8 @@
 package com.example.webdevelopmentproject.service;
 
 import com.example.webdevelopmentproject.config.JwtService;
-import com.example.webdevelopmentproject.repository.UserRepository;
-import com.example.webdevelopmentproject.user.User;
+import com.example.webdevelopmentproject.persistence.repository.UserRepository;
+import com.example.webdevelopmentproject.persistence.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
