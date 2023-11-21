@@ -7,6 +7,7 @@ import com.example.webdevelopmentproject.user.User;
 import lombok.AllArgsConstructor;
 //import org.springframework.security.authentication.AuthenticationManager;
 //import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,17 +22,23 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public ResponseEntity<AuthenticationResponse> register(RegisterRequest request) {
+        String username = request.getUsername();
+
+        if (userRepository.existsByUsername(username)) {
+            return ResponseEntity.badRequest().build();
+        }
+
         var user = User.builder()
-                .username(request.getUsername())
+                .username(username)
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
+
         userRepository.save(user);
         var jtwToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jtwToken).build();
-
+        return ResponseEntity.ok(AuthenticationResponse.builder().token(jtwToken).build());
     }
 
     public AuthenticationResponse authentication(AuthenticationRequest request) {
