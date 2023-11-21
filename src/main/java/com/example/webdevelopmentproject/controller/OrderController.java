@@ -29,4 +29,10 @@ public class OrderController {
         return ResponseEntity.ok(orderService.createOrder(jwtToken, order));
     }
 
+    @PatchMapping(path = "update/{orderId}")
+    public ResponseEntity<Order> updateOrder(HttpServletRequest request, @RequestBody Order order, @PathVariable("orderId") Integer id) {
+        var jwtToken = extractToken(request);
+        return ResponseEntity.ok(orderService.updateOrder(jwtToken, order, id));
+    }
+
 }

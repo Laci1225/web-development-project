@@ -1,5 +1,6 @@
 package com.example.webdevelopmentproject.controller;
 
+import com.example.webdevelopmentproject.model.UserDto;
 import com.example.webdevelopmentproject.service.UserService;
 import com.example.webdevelopmentproject.persistence.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +22,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("hello/getAllUser")
-    public ResponseEntity<List<User>> getAllUser() {
+    public ResponseEntity<List<UserDto>> getAllUser() {
         return ResponseEntity.ok(userService.getAllUser());
     }
 

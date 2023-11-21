@@ -29,4 +29,13 @@ public class OrderService {
         orderRepository.save(order);
         return order;
     }
+
+    public Order updateOrder(String token, Order order, Integer id) {
+        String username = jwtService.extractUsername(token);
+        var user = userRepository.findByUsername(username).orElseThrow();
+        order.setId(id);
+        order.setUserId(user.getId());
+        orderRepository.save(order);
+        return order;
+    }
 }
