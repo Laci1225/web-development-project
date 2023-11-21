@@ -1,5 +1,6 @@
 package com.example.webdevelopmentproject.service;
 
+import com.example.webdevelopmentproject.config.JwtService;
 import com.example.webdevelopmentproject.repository.UserRepository;
 import com.example.webdevelopmentproject.user.User;
 import lombok.AllArgsConstructor;
@@ -11,8 +12,14 @@ import java.util.List;
 @AllArgsConstructor
 public class UserService {
     private UserRepository userRepository;
+    private JwtService jwtService;
 
     public List<User> getAllUser() {
         return userRepository.findAll();
+    }
+
+    public User getMyData(String token) {
+        String userData = jwtService.extractUsername(token);
+        return userRepository.findByUsername(userData).orElseThrow();
     }
 }
