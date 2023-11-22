@@ -3,6 +3,7 @@ package com.example.webdevelopmentproject.service;
 import com.example.webdevelopmentproject.config.JwtService;
 import com.example.webdevelopmentproject.mapper.UserMapper;
 import com.example.webdevelopmentproject.model.UserDto;
+import com.example.webdevelopmentproject.persistence.entity.Role;
 import com.example.webdevelopmentproject.persistence.repository.OrderRepository;
 import com.example.webdevelopmentproject.persistence.repository.UserRepository;
 import com.example.webdevelopmentproject.persistence.entity.User;
@@ -37,5 +38,14 @@ public class UserService {
     public User getMyData(String token) {
         String userData = jwtService.extractUsername(token);
         return userRepository.findByUsername(userData).orElseThrow();
+    }
+
+    public UserDto deleteUser(Integer id, String token) {
+        String adminData = jwtService.extractUsername(token);
+        if (userRepository.findByUsername(adminData).orElseThrow().getRole().equals(Role.ADMIN)) {
+            var userDto = userRepository.findById(id).orElseThrow();
+            userRepository.deleteById(id);
+            return userMapper.fromUserToUserDto(userDto);
+        } else return null;
     }
 }

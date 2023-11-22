@@ -6,9 +6,7 @@ import com.example.webdevelopmentproject.persistence.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +28,15 @@ public class UserController {
     public ResponseEntity<User> getMyData(HttpServletRequest request) {
         var jwtToken = extractToken(request);
         return ResponseEntity.ok(userService.getMyData(jwtToken));
+    }
+
+    @DeleteMapping("private/delete/{id}")
+    public ResponseEntity<UserDto> deleteUser(HttpServletRequest request, @PathVariable("id") Integer id) {
+        var jwtToken = extractToken(request);
+        var response = userService.deleteUser(id, jwtToken);
+        if (response == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(response);
     }
 }
