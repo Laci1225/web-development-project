@@ -38,4 +38,10 @@ public class OrderService {
         orderRepository.save(order);
         return order;
     }
+
+    public Order deleteOrder(Integer id) {
+        var order = orderRepository.findById(id).orElseThrow();
+        orderRepository.deleteById(id);
+        return order;
+    }
 }

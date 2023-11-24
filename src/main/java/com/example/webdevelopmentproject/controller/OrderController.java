@@ -12,7 +12,7 @@ import java.util.List;
 import static com.example.webdevelopmentproject.config.GetJwtToken.extractToken;
 
 @RestController
-@RequestMapping("v1/private")
+@RequestMapping("v1/private/order")
 @AllArgsConstructor
 public class OrderController {
     private OrderService orderService;
@@ -33,6 +33,11 @@ public class OrderController {
     public ResponseEntity<Order> updateOrder(HttpServletRequest request, @RequestBody Order order, @PathVariable("orderId") Integer id) {
         var jwtToken = extractToken(request);
         return ResponseEntity.ok(orderService.updateOrder(jwtToken, order, id));
+    }
+
+    @DeleteMapping(path = "delete/{orderId}")
+    public ResponseEntity<Order> updateOrder(@PathVariable("orderId") Integer id) {
+        return ResponseEntity.ok(orderService.deleteOrder(id));
     }
 
 }
