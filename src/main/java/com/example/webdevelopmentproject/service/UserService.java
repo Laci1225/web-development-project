@@ -3,13 +3,16 @@ package com.example.webdevelopmentproject.service;
 import com.example.webdevelopmentproject.config.JwtService;
 import com.example.webdevelopmentproject.mapper.UserMapper;
 import com.example.webdevelopmentproject.model.UserDto;
+import com.example.webdevelopmentproject.persistence.entity.Order;
 import com.example.webdevelopmentproject.persistence.entity.Role;
 import com.example.webdevelopmentproject.persistence.repository.OrderRepository;
 import com.example.webdevelopmentproject.persistence.repository.UserRepository;
 import com.example.webdevelopmentproject.persistence.entity.User;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,7 @@ public class UserService {
     private UserMapper userMapper;
     private OrderRepository orderRepository;
     private JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserDto> getAllUser() {
         var users = userRepository.findAll();
@@ -46,6 +50,24 @@ public class UserService {
             var userDto = userRepository.findById(id).orElseThrow();
             userRepository.deleteById(id);
             return userMapper.fromUserToUserDto(userDto);
+        } else return null;
+    }
+
+    public UserDto getUserData(Integer id, String token) {
+        String adminData = jwtService.extractUsername(token);
+        if (userRepository.findByUsername(adminData).orElseThrow().getRole().equals(Role.ADMIN)) {
+            var userDto = userRepository.findById(id).orElseThrow();
+            return userMapper.fromUserToUserDto(userDto);
+        } else return null;
+    }
+
+    public User updateUser(String token, User user, String name) {
+        String adminData = jwtService.extractUsername(token);
+        if (userRepository.findByUsername(adminData).orElseThrow().getRole().equals(Role.ADMIN)) {
+            var userDto = userRepository.findByUsername(name).orElseThrow();
+            userDto.setUsername(user.getUsername());
+            userDto.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userRepository.save(userDto);
         } else return null;
     }
 }
