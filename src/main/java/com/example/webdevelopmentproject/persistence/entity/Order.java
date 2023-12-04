@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -26,6 +25,5 @@ public class Order {
     private String weight;
     private Integer userId;
     private LocalDateTime createdDate;
-    @LastModifiedDate
     private LocalDateTime modifiedDate;
 }

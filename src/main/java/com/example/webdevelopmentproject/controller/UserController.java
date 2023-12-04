@@ -1,7 +1,6 @@
 package com.example.webdevelopmentproject.controller;
 
 import com.example.webdevelopmentproject.model.UserDto;
-import com.example.webdevelopmentproject.persistence.entity.Order;
 import com.example.webdevelopmentproject.service.UserService;
 import com.example.webdevelopmentproject.persistence.entity.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("private/getMyData")
-    public ResponseEntity<User> getMyData(HttpServletRequest request) {
+    public ResponseEntity<UserDto> getMyData(HttpServletRequest request) {
         var jwtToken = extractToken(request);
         return ResponseEntity.ok(userService.getMyData(jwtToken));
     }
@@ -52,7 +51,7 @@ public class UserController {
     }
 
     @PatchMapping(path = "private/update/{username}")
-    public ResponseEntity<User> updateOrder(HttpServletRequest request, @RequestBody User user, @PathVariable("username") String name) {
+    public ResponseEntity<UserDto> updateOrder(HttpServletRequest request, @RequestBody User user, @PathVariable("username") String name) {
         var jwtToken = extractToken(request);
         return ResponseEntity.ok(userService.updateUser(jwtToken, user, name));
     }

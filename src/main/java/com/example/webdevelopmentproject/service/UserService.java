@@ -37,9 +37,10 @@ public class UserService {
         return userDtos;
     }
 
-    public User getMyData(String token) {
+    public UserDto getMyData(String token) {
         String userData = jwtService.extractUsername(token);
-        return userRepository.findByUsername(userData).orElseThrow();
+        var user = userRepository.findByUsername(userData).orElseThrow();
+        return userMapper.fromUserToUserDto(user);
     }
 
     public UserDto deleteUser(Integer id, String token) {
@@ -59,14 +60,15 @@ public class UserService {
         } else return null;
     }
 
-    public User updateUser(String token, User user, String name) {
+    public UserDto updateUser(String token, User user, String name) {
         String adminData = jwtService.extractUsername(token);
         if (userRepository.findByUsername(adminData).orElseThrow().getRole().equals(Role.ADMIN)) {
-            var userDto = userRepository.findByUsername(name).orElseThrow();
-            userDto.setUsername(user.getUsername());
-            userDto.setEmail(user.getEmail());
-            userDto.setPassword(passwordEncoder.encode(user.getPassword()));
-            return userRepository.save(userDto);
+            var userInDB = userRepository.findByUsername(name).orElseThrow();
+            userInDB.setUsername(user.getUsername());
+            userInDB.setEmail(user.getEmail());
+            userInDB.setPassword(passwordEncoder.encode(user.getPassword()));
+            var savedUser = userRepository.save(userInDB);
+            return userMapper.fromUserToUserDto(savedUser);
         } else return null;
     }
 }
