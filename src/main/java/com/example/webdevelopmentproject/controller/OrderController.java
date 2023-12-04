@@ -17,22 +17,25 @@ import static com.example.webdevelopmentproject.config.GetJwtToken.extractToken;
 public class OrderController {
     private OrderService orderService;
 
-    @GetMapping("getAllOrderByUserId")
-    public ResponseEntity<List<Order>> getAllOrderByUserId(HttpServletRequest request) {
+    @GetMapping("getAllMyOrders")
+    public ResponseEntity<List<Order>> getAllMyOrders(HttpServletRequest request) {
         var jwtToken = extractToken(request);
-        return ResponseEntity.ok(orderService.gerAllOrderByUserId(jwtToken));
+        return ResponseEntity.ok(orderService.gerAllMyOrders(jwtToken));
     }
 
-    @PostMapping("create")
-    public ResponseEntity<Order> createOrder(HttpServletRequest request, @RequestBody Order order) {
-        var jwtToken = extractToken(request);
-        return ResponseEntity.ok(orderService.createOrder(jwtToken, order));
+    @GetMapping("getAllOrderByUserId/{userId}")
+    public ResponseEntity<List<Order>> getAllOrderByUserId(@PathVariable("userId") Integer id) {
+        return ResponseEntity.ok(orderService.gerAllOrderByUserId(id));
     }
 
-    @PatchMapping(path = "update/{orderId}")
-    public ResponseEntity<Order> updateOrder(HttpServletRequest request, @RequestBody Order order, @PathVariable("orderId") Integer id) {
-        var jwtToken = extractToken(request);
-        return ResponseEntity.ok(orderService.updateOrder(jwtToken, order, id));
+    @PostMapping("create/{userId}")
+    public ResponseEntity<Order> createOrder(@RequestBody Order order, @PathVariable("userId") Integer userId) {
+        return ResponseEntity.ok(orderService.createOrder(order, userId));
+    }
+
+    @PatchMapping(path = "update/{orderId}/{userId}")
+    public ResponseEntity<Order> updateOrder(@RequestBody Order order, @PathVariable("orderId") Integer id, @PathVariable("userId") Integer userId) {
+        return ResponseEntity.ok(orderService.updateOrder(order, id, userId));
     }
 
     @DeleteMapping(path = "delete/{orderId}")

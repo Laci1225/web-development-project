@@ -3,7 +3,6 @@ package com.example.webdevelopmentproject.service;
 import com.example.webdevelopmentproject.config.JwtService;
 import com.example.webdevelopmentproject.mapper.UserMapper;
 import com.example.webdevelopmentproject.model.UserDto;
-import com.example.webdevelopmentproject.persistence.entity.Order;
 import com.example.webdevelopmentproject.persistence.entity.Role;
 import com.example.webdevelopmentproject.persistence.repository.OrderRepository;
 import com.example.webdevelopmentproject.persistence.repository.UserRepository;
@@ -12,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,6 +64,7 @@ public class UserService {
         if (userRepository.findByUsername(adminData).orElseThrow().getRole().equals(Role.ADMIN)) {
             var userDto = userRepository.findByUsername(name).orElseThrow();
             userDto.setUsername(user.getUsername());
+            userDto.setEmail(user.getEmail());
             userDto.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(userDto);
         } else return null;
